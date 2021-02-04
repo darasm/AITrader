@@ -36,4 +36,23 @@ class AITRADE(object):
         actions = self.model.predict(state)
 
         return np.argmax(actions[0])
+
+    def batch_train(self, batch_size):
+        batch = []
+        for i in range(len(self.memory) - batch_size + 1, len(self.memory)):
+            batch.append(self.memory[i])
+
+        for state,action,reward,next_state,done in batch:
+            if not done:
+                reward = reward+self.gamma*np.amax(self.model.predict(next_state)[0])
+                target = self.model.predict(state)
+                target[0][action] = reward
+                self.model.fit(state, target, epochs=1, verbose=0)
+
+            if self.epsilon > self.epsilon_final:
+                self.epsilon *= self.epsilon_decay
+                
+                
+            
+        
         
