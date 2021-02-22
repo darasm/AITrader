@@ -25,7 +25,7 @@ class AITRADE(object):
         model.add(tf.keras.layers.Dense(units=64, activation='relu'))
         model.add(tf.keras.layers.Dense(units=128, activation='relu'))
         model.add(tf.keras.layers.Dense(units=self.action_space, activation='linear'))
-        model.compile(Loss='mse', optimizer=tf.keras.optimizers.SGD(lr=0.001))
+        model.compile(loss='mse', optimizer=tf.keras.optimizers.SGD(lr=0.001))
 
         return model
 
@@ -44,8 +44,9 @@ class AITRADE(object):
 
         for state,action,reward,next_state,done in batch:
             if not done:
-                reward = reward+self.gamma*np.amax(self.model.predict(next_state)[0])
+                reward = reward + self.gamma * np.max(self.model.predict(next_state)[0])
                 target = self.model.predict(state)
+                
                 target[0][action] = reward
                 self.model.fit(state, target, epochs=1, verbose=0)
 
