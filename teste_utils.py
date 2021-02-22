@@ -29,11 +29,6 @@ class MyTest(unittest.TestCase):
         self.assertIsNotNone(dataset_loader(stock_name), None)
         
 
-    def test_state_creator(self):
-        data = dataset_loader("MSFT")
-        self.assertIsNotNone(state_creator(data, 10,4), None)
-        
-
 
 if __name__ == '__main__':
     unittest.main()
